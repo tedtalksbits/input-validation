@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+
+    body,
+    h1,
+    h2,
+    h3,
+    h4,
+    p,
+    figure,
+    blockquote,
+    dl,
+    dd {
+      margin: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      scroll-behavior: smooth;
+      text-rendering: optimizeSpeed;
+      line-height: 1.5;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+
+    }
+
+    .wrapper {
+      display: grid;
+      grid-template-columns: 1fr min(99ch, 100%) 1fr;
+    }
+
+    .wrapper>* {
+      grid-column: 2;
+    }
+
+    .full-bleed {
+      width: 100%;
+      grid-column: 1 / 4;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px 20px;
+      margin: 8px 0;
+      display: inline-block;
+      border: 1px solid #ced4da;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+
+    button {
+      width: 100%;
+      background-color: #4caf50;
+      color: white;
+      padding: 14px 20px;
+      margin: 8px 0;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+  </style>
+  <title>Document</title>
+</head>
+
+<body>
+  <div class="wrapper">
+
+    <input type="datetime-local" id="addWsDate" name="addWsDate" min="1900-01-01T00:00" />
+    <button id="save">submit</button>
+  </div>
+
+</body>
+
+<script>
+  /*
+        ========================================
+        using validy.valid to check if date is valid
+        ========================================
+    */
+  // if date is :invalid then add red border to input
+  //   let today = new Date();
+  //   let dd = String(today.getDate()).padStart(2, '0');
+  //   let mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+  //   let yyyy = today.getFullYear();
+  //   let todayDate = yyyy + '-' + mm + '-' + dd;
+
+  //   let timeNow = new Date().toLocaleTimeString('en-US', {
+  //     hour12: false,
+  //     hour: 'numeric',
+  //     minute: 'numeric',
+  //   });
+
+  //   const addWsDate = document.getElementById('addWsDate');
+  //   // set the max date to today's date yyyy-mm-ddT00:00 eastern time
+  //   addWsDate.max = todayDate + 'T' + timeNow;
+  //   addWsDate.value = todayDate + 'T' + timeNow;
+
+  //   setInterval(() => {
+  //     today = new Date();
+  //     dd = String(today.getDate()).padStart(2, '0');
+  //     mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+  //     yyyy = today.getFullYear();
+  //     todayDate = yyyy + '-' + mm + '-' + dd;
+
+  //     timeNow = new Date().toLocaleTimeString('en-US', {
+  //       hour12: false,
+  //       hour: 'numeric',
+  //       minute: 'numeric',
+  //     });
+
+  //     addWsDate.max = todayDate + 'T' + timeNow;
+  //     // addWsDate.value = todayDate + 'T' + timeNow;
+  //   }, 60000);
+
+  //   addWsDate.addEventListener('change', () => {
+  //     if (addWsDate.validity.valid) {
+  //       console.log('valid');
+  //       addWsDate.style.border = '1px solid #ced4da';
+  //       const save = (document.getElementById('save').style.display =
+  //         'block');
+  //     } else {
+  //       addWsDate.style.border = '1px solid red';
+  //       const error = document.createElement('p');
+  //       error.textContent = 'Please choose a date in the past';
+  //       error.style.color = 'red';
+  //       error.style.fontSize = '12px';
+  //       error.style.margin = '0';
+  //       error.style.padding = '0';
+  //       error.style.marginTop = '5px';
+  //       addWsDate.after(error);
+
+  //       setTimeout(() => {
+  //         error.remove();
+  //       }, 3000);
+
+  //       const save = (document.getElementById('save').style.display =
+  //         'none');
+  //     }
+  //   });
+</script>
+
+<script>
+  /*
+        ========================================
+        using onchange to check if date is valid
+        ========================================
+    */
+
+  let today = new Date();
+  let dd = String(today.getDate()).padStart(2, '0');
+  let mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+  let yyyy = today.getFullYear();
+  let todayDate = yyyy + '-' + mm + '-' + dd;
+
+  let timeNow = new Date().toLocaleTimeString('en-US', {
+    hour12: false,
+    hour: 'numeric',
+    minute: 'numeric',
+  });
+
+  const addWsDate = document.getElementById('addWsDate');
+  const error = document.createElement('p');
+  const save = (document.getElementById('save'));
+
+  addWsDate.value = todayDate + 'T' + timeNow;
+
+  addWsDate.addEventListener('change', () => {
+    const date = new Date(addWsDate.value);
+    const today = new Date();
+    if (date < today && date > new Date('1900-01-01T00:00')) {
+      console.log('valid');
+      addWsDate.style.border = '1px solid #ced4da';
+      save.style.display = 'block';
+      error.remove();
+    } else {
+      addWsDate.style.border = '1px solid red';
+      error.textContent = 'Please choose a date in the past';
+      error.style.color = 'red';
+      error.style.fontSize = '12px';
+      error.style.margin = '0';
+      error.style.padding = '0';
+      error.style.marginTop = '5px';
+      addWsDate.after(error);
+      save.style.display = 'none';
+    }
+  });
+</script>
+
+</html>
